@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <link rel="stylesheet" type="text/css" href="Tictactoe.css">
+</head>
+<body style="font-family:Cursive">
+    <div id="main-container">
+      <h1 id="h1style">TIC-TAC-TOE-GAME</h1>
+        <div id="player-container">
+            <div id="Player1">PLAYER 1</div>
+            <div id="Player2">PLAYER 2</div>
+        </div>
+        <div id="Game">
+            <div class="tic-div divs" id="no1"></div>
+            <div class="tic-div divs" id="no2"></div>
+            <div class="tic-div divs" id="no3"></div>
+            <div class="tic-div" id="no4"></div>
+            <div class="tic-div" id="no5"></div>
+            <div class="tic-div" id="no6"></div>
+            <div class="tic-div" id="no7"></div>
+            <div class="tic-div" id="no8"></div>
+            <div class="tic-div" id="no9"></div>
+        </div>
+        <div id="turns-div">
+          <div id="playersdiv"> NOW: PLAYER 1</div>
+          <div id="psymbol">0</div>
+        </div>
+        <div id="output"></div>
+        <button type="button" id="playagain">Restart Game!</button>
+    </div>
+    <script>
+        let count = 1;
+        let parr1 = [];
+        let parr2 = [];
+        let data;
+        let finalwinner = 0;
+        //array to store all winning patterns:
+        const rarr = ["123", "456", "159", "789", "147", "258", "369", "357"];
+        //function to check winner:
+        function checkWinner(playerArray)
+         {
+            for (let j = 0; j < rarr.length; j++)
+             {
+                //fetching each pattern from array and check it with player array
+                let winner = 0;
+                let datas = rarr[j];
+                for (let k = 0; k < datas.length; k++)
+                 {
+                    if (playerArray.includes(+datas[k]))
+                     {
+                        winner++;
+                    }
+                }
+                //if winner==3 then coressponding player is winner
+                if (winner === 3)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+       //function to handle player turns
+        function handleClick(event)
+         {
+            if (finalwinner !== 0) return;
+            if (count % 2 != 0) {
+                document.getElementById("Player2").style.boxShadow="none";
+                document.getElementById("playersdiv").innerHTML=" NOW: PLAYER 1";
+                document.getElementById("psymbol").innerHTML="0";
+                data = "0";
+                document.getElementById("Player1").style.boxShadow="2px 2px 10px pink";
+                 //pushing player1 clicked no in array
+                parr1.push(+event.target.id.slice(-1));
+                event.target.innerHTML = data;
+            } else {
+              document.getElementById("Player1").style.boxShadow="none";
+              document.getElementById("Player2").style.boxShadow="2px 2px 10px pink";
+              document.getElementById("playersdiv").innerHTML=" NOW: PLAYER 2";
+              document.getElementById("psymbol").innerHTML="1";
+                data = "1";
+                //pushing player2 clicked no in array
+                parr2.push(+event.target.id.slice(-1));
+                event.target.innerHTML = data;
+            }
+            count++;
+            event.target.removeEventListener('click', handleClick);
+            //if count greater than 4 then check the winner
+            if (count > 4) 
+            { 
+                if (checkWinner(parr1)) 
+                {
+                    document.getElementById("playagain").style.display="block";
+                    document.getElementById("output").style.display="block";
+                    document.getElementById("output").innerHTML="Player 1 is the winner!";
+                    finalwinner = 1;
+                } else if (checkWinner(parr2)) {
+                  document.getElementById("playagain").style.display="block";
+                  document.getElementById("output").style.display="block";
+                  document.getElementById("output").innerHTML="Player 2 is the winner!";
+                    finalwinner = 1;
+                } else if (count > 9) {
+                  document.getElementById("playagain").style.display="block";
+                  document.getElementById("output").style.display="block";
+                  document.getElementById("output").innerHTML="It's a draw!";
+                }
+            }
+        }
+          document.getElementById("playagain").addEventListener('click',()=>
+          {
+             window.location.reload();
+          })  
+        document.addEventListener("DOMContentLoaded", () => {
+            const divss = document.getElementById("Game").children;
+            for (let i = 0; i < divss.length; i++) {
+                divss[i].addEventListener('click', handleClick);
+            }
+        });
+    </script>
+</body>
+</html>
